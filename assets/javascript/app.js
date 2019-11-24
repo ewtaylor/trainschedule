@@ -1,33 +1,22 @@
-var url ="https://train-schedule-81e85.firebaseio.com/";
-var dataRef = new Firebase(url);
-var name ='';
-var destination = '';
-var firstTrainTime = '';
-var frequency = '';
-var nextTrain = '';
-var nextTrainFormatted = '';
-var minutesAway = '';
-var firstTimeConverted = '';
-var currentTime = '';
-var diffTime = '';
-var tRemainder = '';
-var minutesTillTrain = '';
-var keyHolder = '';
-var getKey = '';
 
 
+var config = {
+    apiKey: "AIzaSyDqkHjAvCTqpeiHFYUgPfqBPgH7-MYirAs",
+    authDomain: "train-schedule-81e85.firebaseapp.com",
+    databaseURL: "https://train-schedule-81e85.firebaseio.com",
+    projectId: "train-schedule-81e85",
+    storageBucket: "train-schedule-81e85.appspot.com",
+    messagingSenderId: "947832182076",
+    appId: "1:947832182076:web:d25c79712df060f9377a39",
+    measurementId: "G-S1R3MD8V0V"
+  };
+  firebase.initializeApp(config);
+
+  var database = firebase.database();
 $(document).ready(function() {
-    var Config = {
-        apiKey: "AIzaSyDqkHjAvCTqpeiHFYUgPfqBPgH7-MYirAs",
-        authDomain: "train-schedule-81e85.firebaseapp.com",
-        databaseURL: "https://train-schedule-81e85.firebaseio.com",
-        projectId: "train-schedule-81e85",
-        storageBucket: "train-schedule-81e85.appspot.com",
-        messagingSenderId: "947832182076",
-        appId: "1:947832182076:web:d25c79712df060f9377a39",
-        measurementId: "G-S1R3MD8V0V"
-      };
-      var database = firebase.database();
+    
+      
+      
 
      $("#add-train").on("click", function() {
      	
@@ -43,11 +32,11 @@ $(document).ready(function() {
           nextTrain = moment().add(minutesTillTrain, "minutes");
           nextTrainFormatted = moment(nextTrain).format("hh:mm");
 
-     	// Code for the push
-     	keyHolder = dataRef.push({
+     	//  push
+     	keyHolder = database.ref().push({
      		name: name,
      		destination: destination,
-     		firstTrainTime: firstTrainTime,  // 2:22 in my example
+     		firstTrainTime: firstTrainTime,  
      		frequency: frequency,
                nextTrainFormatted: nextTrainFormatted,
                minutesTillTrain: minutesTillTrain
@@ -61,9 +50,9 @@ $(document).ready(function() {
 
      	return false;
      });
-          //id=" + "'" + keyHolder.path.u[0] + "'" + "
-     dataRef.on("child_added", function(childSnapshot) {
-	// full list of items to the well
+          
+     database.ref().on("child_added", function(childSnapshot) {
+	
 
 		$('.train-schedule').append("<tr class='table-row' id=" + "'" + childSnapshot.key() + "'" + ">" +
                "<td class='col-xs-3'>" + childSnapshot.val().name +
@@ -72,21 +61,21 @@ $(document).ready(function() {
                "</td>" +
                "<td class='col-xs-2'>" + childSnapshot.val().frequency +
                "</td>" +
-               "<td class='col-xs-2'>" + childSnapshot.val().nextTrainFormatted + // Next Arrival Formula ()
+               "<td class='col-xs-2'>" + childSnapshot.val().nextTrainFormatted + 
                "</td>" +
-               "<td class='col-xs-2'>" + childSnapshot.val().minutesTillTrain + // Minutes Away Formula
+               "<td class='col-xs-2'>" + childSnapshot.val().minutesTillTrain + 
                "</td>" +
                "<td class='col-xs-1'>" + "<input type='submit' value='remove train' class='remove-train btn btn-primary btn-sm'>" + "</td>" +
           "</tr>");
 // Handle the errors
 }, function(errorObject){
-	//console.log("Errors handled: " + errorObject.code)
+	
 });
 
 $("body").on("click", ".remove-train", function(){
      $(this).closest ('tr').remove();
      getKey = $(this).parent().parent().attr('id');
-     dataRef.child(getKey).remove();
+     database.ref().child(getKey).remove();
 });
 
 }); 
