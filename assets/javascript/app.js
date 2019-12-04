@@ -52,9 +52,10 @@ $(document).ready(function() {
      });
           
      database.ref().on("child_added", function(childSnapshot) {
-	
+          console.log("below is the childsnapshot")
+          console.log(childSnapshot)
 
-		$('.train-schedule').append("<tr class='table-row' id=" + "'" + childSnapshot.key() + "'" + ">" +
+		$('.train-schedule').append("<tr class='table-row' id=" + "'" + childSnapshot.key + "'" + ">" +
                "<td class='col-xs-3'>" + childSnapshot.val().name +
                "</td>" +
                "<td class='col-xs-2'>" + childSnapshot.val().destination +
